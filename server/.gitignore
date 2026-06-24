@@ -1,0 +1,5 @@
+# prevents sensitive content to be uploaded on github
+# ignores the node modules and the env folder
+
+node_modules/
+.env
