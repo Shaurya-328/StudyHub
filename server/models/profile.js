@@ -20,5 +20,4 @@ const profileSchema = new mongoose.Schema({
     }
 });
 
-// used to export the User model so it can be used in other files.
 module.exports = mongoose.model("Profile",profileSchema);
