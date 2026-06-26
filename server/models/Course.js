@@ -45,6 +45,10 @@ const courseSchema = new mongoose.Schema({
         type:String,
         // url of the photo
     },
+    tag:{
+        type:[String],
+        required:true,
+    },
     category:{
         // used to filter courses
         type:mongoose.Schema.Types.ObjectId,
