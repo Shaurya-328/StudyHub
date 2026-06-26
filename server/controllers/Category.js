@@ -39,7 +39,7 @@ exports.createCategory = async(req,res) => {
 } 
 
 
-// getalltags handler function
+// getallcategories handler function
 
 exports.showAllCategories = async(req,res) =>{
     try {
