@@ -13,10 +13,13 @@ const tagsSchema = new mongoose.Schema({
         type:String,
         trim:true,
     },
-    course:{
+    course:[
+        // since there are multiple courses create a tag
+        {
         type:mongoose.Schema.Types.ObjectId,
         ref:"Course",
-    }
+        }
+    ]
 });
 
 
