@@ -1,5 +1,6 @@
 // imports the mongoose library
 const mongoose = require("mongoose");
+const { resetPassword } = require("../controllers/ResetPassword");
 
 // refer class digram to know the details that need to be added in the user schema
 
@@ -47,6 +48,12 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
         // type is string because a url will be added
+    },
+    token:{
+        type:String,
+    },
+    resetPasswordExpires:{
+        type:Date,
     },
     courseProgress:[
         // since there are multiple courses create a array

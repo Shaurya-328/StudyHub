@@ -42,6 +42,7 @@ exports.auth = async (req, res, next) => {
     }
 }
 
+// defining role(student,instructor or admin) ---> almost same code for all three
 //isStudent
 exports.isStudent = async (req, res, next) => {
  try{
