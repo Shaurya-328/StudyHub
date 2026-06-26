@@ -4,11 +4,14 @@ const OTP = require("../models/OTP");
 const otpGenerator = require("otp-generator");
 const  bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const mailSender = require("../utils/mailSender");
+const { passwordUpdated } = require("../mail/templates/passwordUpdate");
+const Profile = require("../models/Profile");
 require("dotenv").config();
 
 // sendOTP
 // our email sender required email and otp as input so this is where we generate otp
-exports.sendOTP = async (req , res) =>{
+exports.sendotp = async (req , res) =>{
 
     try {
            // fetch email from request body
@@ -69,9 +72,10 @@ exports.sendOTP = async (req , res) =>{
              res.status(200).json({
                 success:true,
                 message:'OTP Sent Successfully',
+                otp,
              })
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
         // 500 ---> internal server error
         return res.status(500).json({
             success:false,
@@ -82,7 +86,7 @@ exports.sendOTP = async (req , res) =>{
 
 
 // sign up
-exports.signUp = async (req,res) =>{
+exports.signup = async (req,res) =>{
      try {
         
     // step-1 fetch data from req body(detils entered by the user during sign up like name,age etc)
