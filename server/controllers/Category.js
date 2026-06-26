@@ -1,9 +1,9 @@
-const Tag = require("../models/tags");
+const Category = require("../models/Category");
 
-// we need to create two function -> create tag and get all tags
+// we need to create two function -> create Category and get all Categories
 
-// create tag handler function
-exports.createTag = async(req,res) => {
+// create Category handler function
+exports.createCategory = async(req,res) => {
     try {
 
         // fetch data
@@ -17,17 +17,17 @@ exports.createTag = async(req,res) => {
                 })
             }
 
-        //create Tag entry in DB
-        const tagDetails = await Tag.create({
+        //create Category entry in DB
+        const CategoryDetails = await Category.create({
                 name:name,
                 description:description,
             });
-        console.log(tagDetails);
+        console.log(CategoryDetails);
 
         // return response
         return res.status(200).json({
                 success:true,
-                message:"Tag Created Successfully",
+                message:"Category Created Successfully",
             }) 
     } catch (error) {
         // server error
@@ -41,15 +41,15 @@ exports.createTag = async(req,res) => {
 
 // getalltags handler function
 
-exports.showAllTags = async(req,res) =>{
+exports.showAllCategories = async(req,res) =>{
     try {
-        const allTags = await Tag.find({}, {name:true, description:true}); 
-        // returns all tag that has a name and a description
+        const allCategories = await Category.find({}, {name:true, description:true}); 
+        // returns all Category that has a name and a description
 
         res.status(200).json({
             success:true,
-            message:"All tags returned successfully",
-            allTags,
+            message:"All Categories returned successfully",
+            allCategories,
         })
 
     } catch (error) {

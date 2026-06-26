@@ -1,5 +1,5 @@
 // import the mail sender fuction to use it here 
-import mailSender from "../utils/mailSender";
+const mailSender = require("../utils/mailSender");
 
 const mongoose = require("mongoose");
 

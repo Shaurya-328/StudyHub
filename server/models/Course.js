@@ -45,10 +45,10 @@ const courseSchema = new mongoose.Schema({
         type:String,
         // url of the photo
     },
-    tag:{
+    category:{
         // used to filter courses
         type:mongoose.Schema.Types.ObjectId,
-        ref:"Tag",
+        ref:"Category",
     },
     studentsEnrolled:[
         // since there can be multiple users create a array
