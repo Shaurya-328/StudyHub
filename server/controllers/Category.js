@@ -10,7 +10,7 @@ exports.createCategory = async(req,res) => {
         const {name,description} = req.body;
 
         // validation of data
-        if(!name || !description) {
+        if(!name) {
                 return res.status(400).json({
                     success:false,
                     message:'All fields are required',
@@ -18,11 +18,11 @@ exports.createCategory = async(req,res) => {
             }
 
         //create Category entry in DB
-        const CategoryDetails = await Category.create({
+        const CategorysDetails = await Category.create({
                 name:name,
                 description:description,
             });
-        console.log(CategoryDetails);
+        console.log(CategorysDetails);
 
         // return response
         return res.status(200).json({

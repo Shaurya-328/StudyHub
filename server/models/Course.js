@@ -62,7 +62,14 @@ const courseSchema = new mongoose.Schema({
           ref:"User",
           // refer to user model for details
         }
-    ]
+    ],
+	instructions: {
+		type: [String],
+	},
+	status: {
+		type: String,
+		enum: ["Draft", "Published"],
+	},
 });
 
 

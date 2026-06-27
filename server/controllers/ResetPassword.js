@@ -19,7 +19,7 @@ exports.resetPasswordToken = async (req, res) => {
         }
 
         //generate token 
-        const token  = crypto.randomUUID();
+        const token = crypto.randomBytes(20).toString("hex")
         // this function generated a 36 character string which can be treated as token
 
         //update user by adding token and expiration time
@@ -84,7 +84,7 @@ exports.resetPassword = async (req, res) => {
         }
         //token time check (check if the token has already expired)
         if( userDetails.resetPasswordExpires < Date.now()  ) {
-                return res.json({
+                return res.status(403).json({
                     success:false,
                     message:'Token is expired, please regenerate your token',
                 });

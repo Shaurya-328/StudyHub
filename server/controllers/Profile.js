@@ -1,18 +1,19 @@
 const Profile = require("../models/Profile");
 const User = require("../models/User");
+const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
 // update profile handler function
 exports.updateProfile = async (req, res) => {
     try{
             //get data
-            const {dateOfBirth="", about="", contactNumber, gender} = req.body;
+            const {dateOfBirth="", about="", contactNumber} = req.body;
             // DOB AND ABOUT ARE OPTIONAL
 
             //get userId
             const id = req.user.id;
 
             //validation
-            if(!contactNumber || !gender || !id) {
+            if(!contactNumber || !id) {
                 return res.status(400).json({
                     success:false,
                     message:'All fields are required',
@@ -24,22 +25,21 @@ exports.updateProfile = async (req, res) => {
             const profileId = userDetails.additionalDetails;
 
             // from profile id ascess all the profile data
-            const profileDetails = await Profile.findById(profileId);
+            const profile = await Profile.findById(userDetails.additionalDetails);
 
             //update profile
-            profileDetails.dateOfBirth = dateOfBirth;
-            profileDetails.about = about;
-            profileDetails.gender = gender;
-            profileDetails.contactNumber = contactNumber;
+            profile.dateOfBirth = dateOfBirth;
+            profile.about = about;
+            profile.contactNumber = contactNumber;
 
             // since the object was already created use the save function to save the details in the database 
-            await profileDetails.save();
+            await profile.save();
 
             //return response
             return res.status(200).json({
                 success:true,
                 message:'Profile Updated Successfully',
-                profileDetails,
+                profile,
             });
 
     }
@@ -72,7 +72,7 @@ exports.deleteAccount = async (req, res) => {
         await Profile.findByIdAndDelete({_id:userDetails.additionalDetails});
 
        // unenroll user form all enrolled courses(otherwise even after deleting the enroll count of a course wont decrease)
-       for (const courseId of user.courses) {
+       for(const courseId of userDetails.courses) {
              await Course.findByIdAndUpdate(
              courseId,
             { $pull: { studentsEnroled: id } },
@@ -112,6 +112,7 @@ exports.getAllUserDetails = async (req, res) => {
         return res.status(200).json({
             success:true,
             message:'User Data Fetched Successfully',
+            data:userDetails,
         });
        
     }

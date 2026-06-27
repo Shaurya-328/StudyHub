@@ -13,18 +13,22 @@ const {uploadImageToCloudinary} = require("../utils/imageUploader");
 exports.createCourse = async(req,res) =>{
      try {
         //fetch data 
-        const {courseName, courseDescription, whatYoutWillLearn, price, Category} = req.body;
+        let {courseName, courseDescription, whatYouWillLearn, price, tag, category,status,instructions} = req.body;
 
         //get thumbnail
         const thumbnail = req.files.thumbnailImage;
 
         //validation
-        if(!courseName || !courseDescription || !whatYoutWillLearn || !price || !Category || !thumbnail) {
+        if(!courseName || !courseDescription || !whatYoutWillLearn || !price ||!tag || !category || !thumbnail) {
             return res.status(400).json({
                 success:false,
                 message:'All fields are required',
             });
         }
+
+        if (!status || status === undefined) {
+			status = "Draft";
+		}
 
          // Check if the user is an instructor(validation through middleware)
          // here we need the details of instructor to store while storing the course
@@ -41,8 +45,8 @@ exports.createCourse = async(req,res) =>{
             }
         
         // check given Category is valid or not(search if it is stored in database)
-        const CategoryDetails = await Category.findById(Category);
-        if(!CategoryDetails) {
+        const categoryDetails = await Category.findById(category);
+        if(!categoryDetails) {
             return res.status(404).json({
                 success:false,
                 message:'Category Details not found',
@@ -57,10 +61,13 @@ exports.createCourse = async(req,res) =>{
             courseName,
             courseDescription,
             instructor: instructorDetails._id,
-            whatYouWillLearn: whatYoutWillLearn,
+            whatYouWillLearn:whatYouWillLearn,
             price,
-            category:CategoryDetails._id,
+            tag: tag,
+            category:categoryDetails._id,
             thumbnail:thumbnailImage.secure_url,
+            status: status,
+			instructions: instructions,
         })
 
         //add the new course to the user schema of Instructor
@@ -107,11 +114,21 @@ exports.createCourse = async(req,res) =>{
 
 //getAllCourses handler function
 
-exports.showAllCourses = async (req, res) => {
+exports.getAllCourses = async (req, res) => {
     try {
-            //TODO: change the below statement incrementally
-            const allCourses = await Course.find({});
-
+            const allCourses = await Course.find(
+                {},
+                {
+				  courseName: true,
+				  price: true,
+				  thumbnail: true,
+				  instructor: true,
+				  ratingAndReviews: true,
+				  studentsEnroled: true,
+                }
+            ).populate("instructor")
+             .exec();
+             
             return res.status(200).json({
                 success:true,
                 message:'Data for all courses fetched successfully',

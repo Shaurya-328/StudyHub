@@ -135,17 +135,17 @@ exports.signup = async (req,res) =>{
 
     // step-3 find most recent otp for the user 
     // use the CreatedAt property of the otp to get most recent one
-    const recentOtp = await OTP.find({email}).sort({createdAt:-1}).limit(1); 
-    console.log(recentOtp);
+    const response = await OTP.find({email}).sort({createdAt:-1}).limit(1); 
+    console.log(response);
 
     // validate OTP
-    if(recentOtp.length==0){
+    if(response.length==0){
         // otp not found 
         return res.status(400).json({
             success:false,
             message:"OTP not found",
         })
-    }else if(otp !== recentOtp[0].otp){
+    }else if(otp !== response[0].otp){
         // invalid otp entered by user (does not match from the otp stored in database)
         return res.status(400).json({
             success:false,
@@ -161,6 +161,10 @@ exports.signup = async (req,res) =>{
     const hashedPassword = await bcrypt.hash(password,10);
     // 10 just indicates the number of rounds of hashing
 
+    // Create the user
+		let approved = "";
+		approved === "Instructor" ? (approved = false) : (approved = true);
+
     // create profile document also because additionaldetails refer profile schema
     const profileDetails = await Profile.create({
         gender:null,
@@ -175,7 +179,8 @@ exports.signup = async (req,res) =>{
         email,
         contactNumber,
         password:hashedPassword,
-        accountType,
+        accountType: accountType,
+        approved: approved,
         additionalDetails:profileDetails._id,
         // iamge uses a external api which genertes a image for the profile from the firstname and the lastname initials
         image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
@@ -235,7 +240,7 @@ exports.login = async (req,res) =>{
             const payload = {
                 email: user.email,
                 id: user._id,
-                accountType:user.accountType,
+                role:user.role,
             }
             const token = jwt.sign(payload, process.env.JWT_SECRET, {
                 // JWT_Secret is used so that no one can change the details of the jwt token issued by the server
@@ -287,7 +292,7 @@ exports.changePassword = async (req, res) => {
     const userDetails = await User.findById(req.user.id)
 
     // Get old password, new password, and confirm new password from req.body
-    const { oldPassword, newPassword } = req.body
+    const { oldPassword, newPassword, confirmNewPassword} = req.body
 
     // Validate old password
     const isPasswordMatch = await bcrypt.compare(oldPassword,userDetails.password)
@@ -299,6 +304,23 @@ exports.changePassword = async (req, res) => {
         message: "The password is incorrect"
       })
     }
+
+    // Match new password and confirm new password
+		if (newPassword !== confirmNewPassword) {
+			// If new password and confirm new password do not match, return a 400 (Bad Request) error
+			return res.status(400).json({
+				success: false,
+				message: "The password and confirm password does not match",
+			});
+		}
+
+        // new password should not be equal to the old password
+        if (oldPassword === newPassword) {
+            return res.status(400).json({
+            success: false,
+            message: "New password cannot be the same as the old password",
+        }); 
+}
 
     // Update password
     const encryptedPassword = await bcrypt.hash(newPassword, 10)
