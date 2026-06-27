@@ -4,7 +4,7 @@ const router = express.Router()
 
 // import the required middlewares and controllers
 const { capturePayment, verifySignature } = require("../controllers/Payments")
-const { auth, isInstructor, isStudent, isAdmin } = require("../middleware/auth")
+const { auth, isInstructor, isStudent, isAdmin } = require("../middlewares/auth")
 
 router.post("/capturePayment", auth, isStudent, capturePayment)
 router.post("/verifySignature", verifySignature)

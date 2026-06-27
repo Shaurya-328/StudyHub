@@ -1,7 +1,7 @@
 // import the mail sender fuction to use it here 
 const mailSender = require("../utils/mailSender");
-
 const mongoose = require("mongoose");
+const emailTemplate = require("../mail/templates/emailVerificationTemplate");
 
 const OTPSchema = new mongoose.Schema({
     email:{
@@ -27,7 +27,7 @@ async function sendVerificationEmail(email,otp){
    try {
       // mailsender function takes email,title and body as input
       // this calls mailsender and sends otp email
-     const mailResponse = await mailSender(email,"Verification email from StudyHub",otp);
+     const mailResponse = await mailSender(email,"Verification email from StudyHub",emailTemplate(otp));
      console.log("Email sent successfully : ", mailResponse);
    } catch (error) {
       console.log("error occured while sending mail: " ,error);
@@ -37,9 +37,8 @@ async function sendVerificationEmail(email,otp){
 
 // creating a pre hook
 // means send email before storing the otp in the database
-OTPSchema.pre("save" , async function(next){
+OTPSchema.pre("save" , async function(){
     await sendVerificationEmail(this.email,this.otp);
-    next();
 })
 
 module.exports = mongoose.model("OTP",OTPSchema);

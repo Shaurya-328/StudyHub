@@ -104,7 +104,7 @@ exports.signup = async (req,res) =>{
     // step-2 validating the data
 
     // check if some data is absent
-    if(!firstName || !lastName || !email || !password || !confirmPassword || !contactNumber || !otp){
+    if(!firstName || !lastName || !email || !password || !confirmPassword || !otp){
         // no need to add accounttype since it is a tab so it would automatically assign a value as user or instructor
         return res.status(400).json({
             success:false,

@@ -3,7 +3,7 @@ const express = require("express")
 const router = express.Router()
 
 // import the middleware and controllers
-const { auth } = require("../middleware/auth")
+const { auth } = require("../middlewares/auth")
 const {
   deleteAccount,
   updateProfile,

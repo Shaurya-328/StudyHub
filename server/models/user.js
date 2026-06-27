@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
         required:true,  // marks the field as mandatory
         trim : true     // Removes extra spaces from the beginning and end.
     },
-    lastname:{
+    lastName:{
        type:String,
        required:true,  
        trim : true,
