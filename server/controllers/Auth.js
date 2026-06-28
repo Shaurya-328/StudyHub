@@ -240,7 +240,7 @@ exports.login = async (req,res) =>{
             const payload = {
                 email: user.email,
                 id: user._id,
-                role:user.role,
+                accountType:user.accountType,
             }
             const token = jwt.sign(payload, process.env.JWT_SECRET, {
                 // JWT_Secret is used so that no one can change the details of the jwt token issued by the server

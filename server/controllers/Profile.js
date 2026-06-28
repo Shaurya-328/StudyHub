@@ -6,7 +6,7 @@ const { uploadImageToCloudinary } = require("../utils/imageUploader");
 exports.updateProfile = async (req, res) => {
     try{
             //get data
-            const {dateOfBirth="", about="", contactNumber} = req.body;
+            const {dateOfBirth="", about="", contactNumber,gender} = req.body;
             // DOB AND ABOUT ARE OPTIONAL
 
             //get userId
@@ -31,6 +31,7 @@ exports.updateProfile = async (req, res) => {
             profile.dateOfBirth = dateOfBirth;
             profile.about = about;
             profile.contactNumber = contactNumber;
+            profile.gender = gender;
 
             // since the object was already created use the save function to save the details in the database 
             await profile.save();
@@ -57,6 +58,7 @@ exports.updateProfile = async (req, res) => {
 exports.deleteAccount = async (req, res) => {
     try{
         //get id 
+        console.log("Printing ID",req.user.id);
         const id = req.user.id;
 
         //validation
@@ -69,13 +71,13 @@ exports.deleteAccount = async (req, res) => {
         } 
 
         //delete profile
-        await Profile.findByIdAndDelete({_id:userDetails.additionalDetails});
+        await Profile.findByIdAndDelete({_id: user.additionalDetails});
 
        // unenroll user form all enrolled courses(otherwise even after deleting the enroll count of a course wont decrease)
        for(const courseId of userDetails.courses) {
              await Course.findByIdAndUpdate(
              courseId,
-            { $pull: { studentsEnroled: id } },
+            { $pull: { studentsEnrolled: id } },
             { new: true }
            )
         }
@@ -93,7 +95,7 @@ exports.deleteAccount = async (req, res) => {
     catch(error) {
         return res.status(500).json({
             success:false,
-            message:'User cannot be deleted successfully',
+            message:error.message,
         });
     }
 };

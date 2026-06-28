@@ -19,7 +19,7 @@ exports.createCourse = async(req,res) =>{
         const thumbnail = req.files.thumbnailImage;
 
         //validation
-        if(!courseName || !courseDescription || !whatYoutWillLearn || !price ||!tag || !category || !thumbnail) {
+        if(!courseName || !courseDescription || !whatYouWillLearn || !price ||!tag || !category || !thumbnail) {
             return res.status(400).json({
                 success:false,
                 message:'All fields are required',
@@ -83,7 +83,7 @@ exports.createCourse = async(req,res) =>{
         
         // Update the Category schema by adding the newly created course
         await Category.findByIdAndUpdate(
-              CategoryDetails._id,
+              categoryDetails._id,
               {
                 $push: {
                     course: newCourse._id,
@@ -165,7 +165,7 @@ exports.getCourseDetails = async (req, res) => {
                                             }
                                         )
                                         .populate("category")
-                                        .populate("ratingAndreviews")
+                                        //.populate("ratingAndreviews")
                                         .populate({
                                             path:"courseContent",
                                             populate:{

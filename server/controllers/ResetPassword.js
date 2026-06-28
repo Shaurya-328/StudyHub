@@ -2,7 +2,7 @@
 const User = require("../models/User");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
-
+const crypto = require("crypto");
 
 //resetPasswordToken
 exports.resetPasswordToken = async (req, res) => {
@@ -51,7 +51,7 @@ exports.resetPasswordToken = async (req, res) => {
         console.log(error);
         return res.status(500).json({
             success:false,
-            message:'Something went wrong while sending reset password mail'
+            message:error.message
         })
     }  
 }
@@ -82,7 +82,18 @@ exports.resetPassword = async (req, res) => {
                 message:'Token is invalid',
             });
         }
-        //token time check (check if the token has already expired)
+
+        // check if new password == old password 
+        const isSamePassword = await bcrypt.compare(password, userDetails.password);
+
+        if (isSamePassword) {
+            return res.status(400).json({
+            success: false,
+            message: "New password cannot be same as old password",
+             });
+            }
+            
+         //token time check (check if the token has already expired)
         if( userDetails.resetPasswordExpires < Date.now()  ) {
                 return res.status(403).json({
                     success:false,

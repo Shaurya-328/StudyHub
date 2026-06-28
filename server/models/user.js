@@ -1,6 +1,5 @@
 // imports the mongoose library
 const mongoose = require("mongoose");
-const { resetPassword } = require("../controllers/ResetPassword");
 
 // refer class digram to know the details that need to be added in the user schema
 

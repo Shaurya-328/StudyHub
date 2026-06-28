@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 const sectionSchema = new mongoose.Schema({
    
-     SectionName:{
+     sectionName:{
         type:String,
         required:true,
         trim:true,
