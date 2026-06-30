@@ -10,7 +10,7 @@ import CodeBlocks from "../components/core/HomePage/CodeBlocks"
 import LearningLanguageSection from "../components/core/HomePage/LearningLanguageSection"
 import TimelineSection from "../components/core/HomePage/TimelineSection"
 import Footer from "../components/common/Footer"
-import ReviewSlider from "../components/common/ReviewSlider"
+// import ReviewSlider from "../components/common/ReviewSlider"
 import ExploreMore from "../components/core/HomePage/ExploreMore"
 import InstructorSection from "../components/core/HomePage/InstructorSection"
 
@@ -151,7 +151,7 @@ const Home = () => {
           {/* Explore Full Catagory Section */}
           <div className="mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8">
             
-            <div className="flex flex-row gap-7 text-white lg:mt-8">
+            <div className="flex flex-row gap-7 text-white lg:mt-24">
               {/* creating buttons using button component */}
               <CTAButton active={true} linkto={"/signup"}>
                 <div className="flex items-center gap-2">
@@ -200,6 +200,7 @@ const Home = () => {
         <LearningLanguageSection />
 
       </div>
+
 
       {/*Section 3 */}
       <div className="relative mx-auto my-20 flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
