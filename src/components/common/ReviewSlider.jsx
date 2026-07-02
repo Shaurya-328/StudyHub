@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from "react"
-import ReactStars from "react-rating-stars-component"
+import React, { useEffect, useState } from "react";
+import ReactStars from "react-rating-stars-component";
+
 // Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react"
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper modules
+import { Autoplay, FreeMode, Pagination } from "swiper/modules";
 
 // Import Swiper styles
-import "swiper/css"
-import "swiper/css/free-mode"
-import "swiper/css/pagination"
-import "../../App.css"
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
+
+import "../../App.css";
+
 // Icons
-import { FaStar } from "react-icons/fa"
-// Import required modules
-import { Autoplay, FreeMode, Pagination } from "swiper"
+import { FaStar } from "react-icons/fa";
 
 // Get apiFunction and the endpoint
-import { apiConnector } from "../../services/apiconnector"
-import { ratingsEndpoints } from "../../services/apis"
+import { apiConnector } from "../../services/apiconnector";
+import { ratingsEndpoints } from "../../services/apis";
 
 function ReviewSlider() {
   const [reviews, setReviews] = useState([])
