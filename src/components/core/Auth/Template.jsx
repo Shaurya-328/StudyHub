@@ -1,3 +1,4 @@
+// Common template used by both Login and Signup pages
 import { FcGoogle } from "react-icons/fc"
 import { useSelector } from "react-redux"
 
@@ -6,6 +7,8 @@ import LoginForm from "./LoginForm"
 import SignupForm from "./SignupForm"
 
 function Template({ title, description1, description2, image, formType }) {
+
+  // Get authentication loading state from Redux
   const { loading } = useSelector((state) => state.auth)
 
   return (
