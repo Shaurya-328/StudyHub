@@ -86,7 +86,7 @@ exports.createCourse = async(req,res) =>{
               categoryDetails._id,
               {
                 $push: {
-                    course: newCourse._id,
+                    courses: newCourse._id,
                 },
               },
              { new: true }
@@ -124,7 +124,7 @@ exports.getAllCourses = async (req, res) => {
 				  thumbnail: true,
 				  instructor: true,
 				  ratingAndReviews: true,
-				  studentsEnroled: true,
+				  studentsEnrolled: true,
                 }
             ).populate("instructor")
              .exec();
