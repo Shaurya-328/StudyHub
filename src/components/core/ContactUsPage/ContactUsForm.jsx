@@ -12,7 +12,11 @@ const ContactUsForm = () => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitSuccessful },
-  } = useForm()
+     } = useForm({
+        defaultValues: {
+        countrycode: "+91",
+     },
+   })
 
   const submitContactForm = async (data) => {
     // console.log("Form Data - ", data)
@@ -39,6 +43,7 @@ const ContactUsForm = () => {
         lastname: "",
         message: "",
         phoneNo: "",
+         countrycode: "+91",
       })
     }
   }, [reset, isSubmitSuccessful])
