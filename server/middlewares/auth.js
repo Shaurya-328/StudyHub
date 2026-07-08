@@ -7,9 +7,15 @@ const User = require("../models/User");
 exports.auth = async (req, res, next) => {
     try{
         //extract token
-        const token = req.cookies.token 
-                        || req.body.token 
-                        || req.header("Authorization").replace("Bearer ", "");
+        console.log("Authorization Header:", req.header("Authorization"));
+        console.log("req.cookies =", req.cookies);
+        console.log("req.body =", req.body);
+
+        const token = req.cookies?.token 
+                        || req.body?.token 
+                        || req.header("Authorization")?.replace("Bearer ", "");
+
+        console.log("Extracted Token:", token);
 
         //if token missing, then return response
         if(!token) {
@@ -21,11 +27,14 @@ exports.auth = async (req, res, next) => {
 
         //verify the token(use secret key to verify the token)
         try{
-            const decode =  jwt.verify(token, process.env.JWT_SECRET); 
+            console.log("JWT SECRET:", process.env.JWT_SECRET);
+            console.log("TOKEN:", token);
+            const decode =  await jwt.verify(token, process.env.JWT_SECRET); 
             console.log(decode);  // shows the user details stored in the jwt token
             req.user = decode;   // adding user details to request
         }
         catch(err) {
+             console.log("VERIFY ERROR:", err);
             //verification - issue
             return res.status(401).json({
                 success:false,
@@ -35,6 +44,7 @@ exports.auth = async (req, res, next) => {
         next();   // move to the next middleware
     }
     catch(error) {  
+        console.log("OUTER ERROR:", error);
         return res.status(401).json({
             success:false,
             message:'Something went wrong while validating the token',

@@ -1,4 +1,5 @@
 import "./App.css";
+import { useEffect } from "react"
 import {Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./pages/Home"
 import Navbar from "./components/common/Navbar"
@@ -28,13 +29,23 @@ import CourseDetails from "./pages/CourseDetails";
 import ViewCourse from "./pages/ViewCourse";
 import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor";
+import { getUserDetails } from "./services/operations/profileAPI"
 
 function App() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const { user } = useSelector((state) => state.profile)
+  const { user } = useSelector((state) => state.profile);
+  
+  useEffect(() => {
+      if (localStorage.getItem("token")) {
+        const token = JSON.parse(localStorage.getItem("token"))
+        dispatch(getUserDetails(token, navigate))
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+  
 
 
   return (

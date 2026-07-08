@@ -1,9 +1,9 @@
 import { toast } from "react-hot-toast"
 
-import rzpLogo from "../../assets/Logo/rzp_logo.png";
+import rzpLogo from "../../assets/Logo/rzp_logo.png"
 import { resetCart } from "../../slices/cartSlice"
 import { setPaymentLoading } from "../../slices/courseSlice"
-import { apiConnector } from "../apiconnector"
+import { apiConnector } from "../apiConnector"
 import { studentEndpoints } from "../apis"
 
 const {
@@ -28,7 +28,7 @@ function loadScript(src) {
 }
 
 // Buy the Course
-export async function buyCourse(
+export async function BuyCourse(
   token,
   courses,
   user_details,
