@@ -24,8 +24,10 @@ export default function Upload({
   const inputRef = useRef(null)
 
   const onDrop = (acceptedFiles) => {
+    console.log("Accepted Files:", acceptedFiles);
     const file = acceptedFiles[0]
     if (file) {
+      console.log("Selected File:", file);
       previewFile(file)
       setSelectedFile(file)
     }
@@ -95,9 +97,13 @@ export default function Upload({
         ) : (
           <div
             className="flex w-full flex-col items-center p-6"
-            {...getRootProps()}
+            {...getRootProps({
+                onClick: () => console.log("DROPZONE CLICKED"),
+            })}
           >
-            <input {...getInputProps()} ref={inputRef} />
+            <input{...getInputProps()}
+            onClick={() => console.log("INPUT CLICKED")}
+              />
             <div className="grid aspect-square w-14 place-items-center rounded-full bg-pure-greys-800">
               <FiUploadCloud className="text-2xl text-yellow-50" />
             </div>

@@ -220,6 +220,7 @@ exports.login = async (req,res) =>{
 
         // check user already exist or not
         const user = await User.findOne({email}).populate("additionalDetails");
+        console.log(user);
        // additionalDetails stores a Profile ObjectId.
        // populate("additionalDetails") retrieves the corresponding
        // Profile document and attaches it to the user object.
@@ -259,6 +260,7 @@ exports.login = async (req,res) =>{
                 httpOnly:true,
             }
             // create a cookie named "token" that stores the JWT
+            console.log("Sending user:", user.accountType);
             res.cookie("token", token, options).status(200).json({
                 // send the cookie (the cookie stores the jwt token in the user browser)
                 success:true,

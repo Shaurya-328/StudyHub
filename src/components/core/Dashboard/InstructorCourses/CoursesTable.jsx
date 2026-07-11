@@ -38,6 +38,9 @@ export default function CoursesTable({ courses, setCourses }) {
   }
 
   // console.log("All Course ", courses)
+  console.log(courses);
+  console.log(courses[0]);
+  console.log(courses[0]?.createdAt);
 
   return (
     <>

@@ -17,7 +17,7 @@ const {uploadImageToCloudinary} = require("../utils/imageUploader");
 exports.createCourse = async(req,res) =>{
      try {
         //fetch data 
-        let {courseName, courseDescription, whatYouWillLearn, price, tag: _tag, category,status,instructions} = req.body;
+        let {courseName, courseDescription, whatYouWillLearn, price, tag: _tag, category,status,instructions: _instructions} = req.body;
 
         //get thumbnail
         const thumbnail = req.files.thumbnailImage;
@@ -159,14 +159,19 @@ exports.getAllCourses = async (req, res) => {
 
 // getCourseDetails
 
-exports.getCourseDetails = async (req, res) => {
+exports.getFullCourseDetails = async (req, res) => {
     try {
+            console.log("===== getFullCourseDetails =====");
+            console.log(req.body);
             //get id
             const {courseId} = req.body;
+            const userId = req.user.id;
+
+            console.log("Course ID:", courseId);
+            console.log("User ID:", userId);
 
             //find course details(populate all the fields which use a reference in the course schema so that instead of returning objectid we get the real data )
-            const courseDetails = await Course.find(
-                                        {_id:courseId})
+            const courseDetails = await Course.findById(courseId)
                                         .populate(
                                             {
                                                 path:"instructor",
@@ -175,19 +180,19 @@ exports.getCourseDetails = async (req, res) => {
                                                 },
                                             }
                                         )
-                                        .populate("Category")
-                                        .populate("RatingAndReview")
+                                        .populate("category")
+                                        .populate("ratingAndReviews")
                                         .populate({
                                             path:"courseContent",
                                             populate:{
-                                                path:"SubSection",
+                                                path:"subSection",
                                             },
                                         })
                                         .exec();
 
                 //validation
                 if(!courseDetails) {
-                    return res.status(400).json({
+                    return res.status(404).json({
                         success:false,
                         message:`Could not find the course with ${courseId}`,
                     });
@@ -221,7 +226,7 @@ exports.deleteCourse = async (req, res) => {
     }
 
     // Unenroll students from the course
-    const studentsEnrolled = course.studentsEnroled
+    const studentsEnrolled = course.studentsEnrolled
     for (const studentId of studentsEnrolled) {
       await User.findByIdAndUpdate(studentId, {
         $pull: { courses: courseId },
@@ -285,7 +290,7 @@ exports.editCourse = async (req, res) => {
 
     // Update only the fields that are present in the request body
     for (const key in updates) {
-      if (updates.hasOwnProperty(key)) {
+      if (updates[key]) {
         if (key === "tag" || key === "instructions") {
           course[key] = JSON.parse(updates[key])
         } else {
@@ -330,55 +335,82 @@ exports.editCourse = async (req, res) => {
   }
 }
 
-// Get One Single Course Details
-// exports.getCourseDetails = async (req, res) => {
-//   try {
-//     const { courseId } = req.body
-//     const courseDetails = await Course.findOne({
-//       _id: courseId,
-//     })
-//       .populate({
-//         path: "instructor",
-//         populate: {
-//           path: "additionalDetails",
-//         },
-//       })
-//       .populate("category")
-//       .populate("ratingAndReviews")
-//       .populate({
-//         path: "courseContent",
-//         populate: {
-//           path: "subSection",
-//         },
-//       })
-//       .exec()
-//     // console.log(
-//     //   "###################################### course details : ",
-//     //   courseDetails,
-//     //   courseId
-//     // );
-//     if (!courseDetails || !courseDetails.length) {
-//       return res.status(400).json({
-//         success: false,
-//         message: `Could not find course with id: ${courseId}`,
-//       })
-//     }
+ // Get One Single Course Details
+exports.getCourseDetails = async (req, res) => {
+  try {
+    const { courseId } = req.body
+    const courseDetails = await Course.findOne({
+      _id: courseId,
+    })
+      .populate({
+        path: "instructor",
+        populate: {
+          path: "additionalDetails",
+        },
+      })
+      .populate("category")
+      .populate("ratingAndReviews")
+      .populate({
+        path: "courseContent",
+        populate: {
+          path: "subSection",
+          select: "-videoUrl",
+        },
+      })
+      .exec()
+    // console.log(
+    //   "###################################### course details : ",
+    //   courseDetails,
+    //   courseId
+    // );
+    if (!courseDetails) {
+      return res.status(400).json({
+        success: false,
+        message: `Could not find course with id: ${courseId}`,
+      })
+    }
 
-//     if (courseDetails.status === "Draft") {
-//       return res.status(403).json({
-//         success: false,
-//         message: `Accessing a draft course is forbidden`,
-//       })
-//     }
+    if (courseDetails.status === "Draft") {
+      return res.status(403).json({
+        success: false,
+        message: `Accessing a draft course is forbidden`,
+      })
+    }
 
-//     return res.status(200).json({
-//       success: true,
-//       data: courseDetails,
-//     })
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     })
-//   }
-// }
+    return res.status(200).json({
+      success: true,
+      data: courseDetails,
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    })
+  }
+}
+
+// Get a list of Course for a given Instructor
+exports.getInstructorCourses = async (req, res) => {
+  try {
+    // Get the instructor ID from the authenticated user or request body
+    const instructorId = req.user.id
+
+    // Find all courses belonging to the instructor
+    const instructorCourses = await Course.find({
+      instructor: instructorId,
+    }).sort({ createdAt: -1 })
+
+    // Return the instructor's courses
+    res.status(200).json({
+      success: true,
+      data: instructorCourses,
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      success: false,
+      message: "Failed to retrieve instructor courses",
+      error: error.message,
+    })
+  }
+}

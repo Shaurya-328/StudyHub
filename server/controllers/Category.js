@@ -2,6 +2,11 @@ const Category = require("../models/Category");
 
 // we need to create two function -> create Category and get all Categories
 
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max)
+}
+
 // create Category handler function
 exports.createCategory = async(req,res) => {
     try {

@@ -36,6 +36,7 @@ export default function Instructor() {
       0
     )
   
+    console.log(courses)
     return (
       <div>
         <div className="space-y-2">
@@ -109,7 +110,7 @@ export default function Instructor() {
                       </p>
                       <div className="mt-1 flex items-center space-x-2">
                         <p className="text-xs font-medium text-richblack-300">
-                          {course.studentsEnroled.length} students
+                          {course.studentsEnroled?.length ?? 0} students
                         </p>
                         <p className="text-xs font-medium text-richblack-300">
                           |

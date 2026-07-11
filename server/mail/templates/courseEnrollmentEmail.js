@@ -24,11 +24,6 @@ exports.courseEnrollmentEmail = (courseName, name) => {
                 text-align: center;
             }
     
-            .logo {
-                max-width: 200px;
-                margin-bottom: 20px;
-            }
-    
             .message {
                 font-size: 18px;
                 font-weight: bold;
@@ -67,8 +62,6 @@ exports.courseEnrollmentEmail = (courseName, name) => {
     
     <body>
         <div class="container">
-            <a href="https://studynotion-edtech-project.vercel.app"><img class="logo" src="https://i.ibb.co/7Xyj3PC/logo.png"
-                    alt="StudyNotion Logo"></a>
             <div class="message">Course Registration Confirmation</div>
             <div class="body">
                 <p>Dear ${name},</p>

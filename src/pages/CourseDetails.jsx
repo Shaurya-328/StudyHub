@@ -49,7 +49,7 @@ function CourseDetails() {
   // Calculating Avg Review count
   const [avgReviewCount, setAvgReviewCount] = useState(0)
   useEffect(() => {
-    const count = GetAvgRating(response?.data?.courseDetails.ratingAndReviews)
+    const count = GetAvgRating(response?.data?.ratingAndReviews)
     setAvgReviewCount(count)
   }, [response])
   // console.log("avgReviewCount: ", avgReviewCount)
@@ -70,7 +70,7 @@ function CourseDetails() {
   const [totalNoOfLectures, setTotalNoOfLectures] = useState(0)
   useEffect(() => {
     let lectures = 0
-    response?.data?.courseDetails?.courseContent?.forEach((sec) => {
+    response?.data?.courseContent?.forEach((sec) => {
       lectures += sec.subSection.length || 0
     })
     setTotalNoOfLectures(lectures)
@@ -99,7 +99,7 @@ function CourseDetails() {
     instructor,
     studentsEnrolled,
     createdAt,
-  } = response.data?.courseDetails
+  } = response.data
 
   const handleBuyCourse = () => {
     if (token) {
@@ -183,7 +183,7 @@ function CourseDetails() {
           {/* Courses Card */}
           <div className="right-[1rem] top-[60px] mx-auto hidden min-h-[600px] w-1/3 max-w-[410px] translate-y-24 md:translate-y-0 lg:absolute  lg:block">
             <CourseDetailsCard
-              course={response?.data?.courseDetails}
+              course={response?.data}
               setConfirmationModal={setConfirmationModal}
               handleBuyCourse={handleBuyCourse}
             />

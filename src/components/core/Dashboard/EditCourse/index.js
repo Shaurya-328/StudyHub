@@ -20,9 +20,14 @@ export default function EditCourse() {
     ;(async () => {
       setLoading(true)
       const result = await getFullDetailsOfCourse(courseId, token)
-      if (result?.courseDetails) {
+
+
+      console.log("Result:", result)
+      console.log("Is Array?", Array.isArray(result))
+      console.log("First element:", result[0])
+      if (result) {
         dispatch(setEditCourse(true))
-        dispatch(setCourse(result?.courseDetails))
+        dispatch(setCourse(result))
       }
       setLoading(false)
     })()
