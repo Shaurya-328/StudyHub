@@ -103,6 +103,7 @@ function CourseDetails() {
 
   const handleBuyCourse = () => {
     if (token) {
+      console.log("Course ID:", courseId)
       BuyCourse(token, [courseId], user, navigate, dispatch)
       return
     }

@@ -65,14 +65,15 @@ export async function BuyCourse(
     console.log("PAYMENT RESPONSE FROM BACKEND............", orderResponse.data)
 
     // Opening the Razorpay SDK
+    console.log(orderResponse.data);
     const options = {
-      key: process.env.RAZORPAY_KEY,
+      key: orderResponse.data.key,
       currency: orderResponse.data.data.currency,
       amount: `${orderResponse.data.data.amount}`,
       order_id: orderResponse.data.data.id,
       name: "StudyNotion",
       description: "Thank you for Purchasing the Course.",
-      image: rzpLogo,
+      // image: rzpLogo,
       prefill: {
         name: `${user_details.firstName} ${user_details.lastName}`,
         email: user_details.email,
