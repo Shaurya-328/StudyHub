@@ -1,5 +1,5 @@
 // import all the models and the packages that would be needed
-const User = require("../models/User");
+const User = require("../models/user");
 const OTP = require("../models/OTP");
 const otpGenerator = require("otp-generator");
 const  bcrypt = require("bcrypt");
