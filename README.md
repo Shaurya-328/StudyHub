@@ -1,31 +1,37 @@
-# React & Tailwind CSS Starter Pack
+StudyHub 🎓
 
-This is a starter pack for creating React projects with Tailwind CSS configured. It uses React version **18.2** and Tailwind CSS version **3.2**.
+StudyHub is a full-stack EdTech platform built with the MERN stack, similar in spirit to Udemy. It allows students to browse, purchase, and learn from courses, and instructors to create and sell their own courses — with a full backend handling auth, payments, media, and email.
 
-## Usage
+Tech Stack
+Frontend: React, Redux Toolkit, Tailwind CSS, Axios
+Backend: Node.js, Express
+Database: MongoDB (via Mongoose)
+Auth: JWT + email OTP verification
+Payments: Razorpay
+Media Storage: Cloudinary (thumbnails, videos)
+Email: Nodemailer (verification, password reset, payment receipts)
+How It Works
 
-This starter pack includes a basic setup for using **Tailwind CSS with React**. To start building your own components and styles, follow these steps:
+1. Authentication Users sign up as a Student or Instructor. Signup requires an OTP sent to their email for verification. Once verified, login issues a JWT token, which is used to authenticate all further requests and decide what a user is allowed to do (role-based access).
 
-1. Clone the repository to your local machine.
-    ```sh
-    git clone https://github.com/thepranaygupta/react-tailwind-css-starter-pack.git
-    ```
+2. Course Creation (Instructor side) Instructors build a course step-by-step: course info → add sections → add video lectures under each section → publish. Videos and thumbnails are uploaded to Cloudinary, and course data (sections, lectures, pricing, category) is stored in MongoDB.
 
-1. Install the required packages.
-    ```sh
-    cd react-tailwind-css-starter-pack
-    npm install
-    ```
+3. Browsing & Purchasing (Student side) Students explore courses by category, view ratings/reviews, and add courses to a cart. Checkout is handled through Razorpay — the backend creates an order, the frontend collects payment, and the backend verifies the payment signature before enrolling the student in the course. A confirmation email is sent automatically.
 
-1. Start the development server.
-    ```sh
-    npm start
-    ```
-1. Open the project in your browser at [`http://localhost:3000`](http://localhost:3000) to view your project.
-1. Create your React components and add your styles using Tailwind classes. You can also create new CSS files and import them into your components.
+4. Learning & Progress Tracking Once enrolled, students watch lecture videos and their progress (per video, per course) is saved in the database, so they can pick up where they left off. After completing a course, they can leave a rating and review.
 
-The project is set up to use `postcss-cli` to process your CSS files. You can add your own `tailwind.config.js` file to customize your Tailwind setup.
+5. Instructor Dashboard Instructors get a dashboard showing their courses, number of students enrolled, and revenue — visualized with charts.
 
-## Contributing
+6. Supporting Features
 
-Contributions are welcome! If you have any suggestions or find any issues, please feel free to open an issue or a pull request.
+Forgot/reset password flow via emailed secure links
+Contact-us form that triggers an automated email response
+Admin-level controls for managing categories
+
+## What's Next
+
+I'm actively looking to extend this project with:
+
+Refresh tokens for more secure, longer-lived sessions
+A dedicated Admin dashboard (manage users, courses, categories)
+Rate limiting on auth/OTP routes to prevent abuse
