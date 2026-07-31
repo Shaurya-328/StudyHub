@@ -148,6 +148,7 @@ exports.getAllUserDetails = async (req, res) => {
 
 exports.updateDisplayPicture = async (req, res) => {
     try {
+      console.log(req.files);
       const displayPicture = req.files.displayPicture
       const userId = req.user.id
       const image = await uploadImageToCloudinary(
@@ -207,18 +208,20 @@ exports.getEnrolledCourses = async (req, res) => {
           userDetails.courses[i].courseContent[j].subSection.length
       }
       let courseProgressCount = await CourseProgress.findOne({
-        courseID: userDetails.courses[i]._id,
+        courseId: userDetails.courses[i]._id,
         userId: userId,
       })
-      courseProgressCount = courseProgressCount?.completedVideos.length
+      const completedVideos = courseProgressCount?.completedVideos?.length || 0
+
       if (SubsectionLength === 0) {
         userDetails.courses[i].progressPercentage = 100
       } else {
         // To make it up to 2 decimal point
         const multiplier = Math.pow(10, 2)
+
         userDetails.courses[i].progressPercentage =
           Math.round(
-            (courseProgressCount / SubsectionLength) * 100 * multiplier
+            (completedVideos / SubsectionLength) * 100 * multiplier
           ) / multiplier
       }
     }

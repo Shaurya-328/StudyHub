@@ -190,6 +190,13 @@ exports.getFullCourseDetails = async (req, res) => {
                                         })
                                         .exec();
 
+                let courseProgressCount = await CourseProgress.findOne({
+                      courseID: courseId,
+                      userId: userId,
+                    })
+                
+                    console.log("courseProgressCount : ", courseProgressCount)
+
                 //validation
                 if(!courseDetails) {
                     return res.status(404).json({
@@ -197,11 +204,28 @@ exports.getFullCourseDetails = async (req, res) => {
                         message:`Could not find the course with ${courseId}`,
                     });
                 }
+
+                let totalDurationInSeconds = 0
+                courseDetails.courseContent.forEach((content) => {
+                content.subSection.forEach((subSection) => {
+                    const timeDurationInSeconds = parseInt(subSection.timeDuration)
+                    totalDurationInSeconds += timeDurationInSeconds
+                  })
+               })
+
+               const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
+
                 //return response
                 return res.status(200).json({
                     success:true,
                     message:"Course Details fetched successfully",
-                    data:courseDetails,
+                    data: {
+                      courseDetails,
+                      totalDuration,
+                      completedVideos: courseProgressCount?.completedVideos
+                       ? courseProgressCount?.completedVideos
+                      : [],
+                    },
                 })
 
     }

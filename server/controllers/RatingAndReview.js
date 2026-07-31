@@ -33,6 +33,9 @@ exports.createRating = async (req, res) => {
                                                 course:courseId,
                                             });
 
+
+        console.log("alreadyReviewed =", alreadyReviewed)
+
         if(alreadyReviewed) {
                     return res.status(403).json({
                         success:false,

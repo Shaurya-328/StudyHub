@@ -9,6 +9,10 @@ const courseProgress = new mongoose.Schema({
     ref:"Course",
     // refer to the course model
    },
+   userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
    // each course contains a series of videos
    completedVideos:[
       // since each couse contains multiple subsections create a array

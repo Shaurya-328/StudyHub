@@ -8,18 +8,30 @@ exports.updateCourseProgress = async (req, res) => {
   const { courseId, subsectionId } = req.body
   const userId = req.user.id
 
+  console.log("courseId:", courseId);
+  console.log("subsectionId:", subsectionId);
+  console.log("userId:", userId);
+
   try {
     // Check if the subsection is valid
     const subsection = await SubSection.findById(subsectionId)
+    console.log("Subsection:", subsection);
     if (!subsection) {
       return res.status(404).json({ error: "Invalid subsection" })
     }
 
+    console.log("courseId from request:", courseId);
+    console.log("userId from token:", userId);
+
     // Find the course progress document for the user and course
     let courseProgress = await CourseProgress.findOne({
-      courseID: courseId,
+      courseId: courseId,
       userId: userId,
     })
+
+    console.log("CourseProgress:", courseProgress);
+
+    console.log("Course Progress:", courseProgress);
 
     if (!courseProgress) {
       // If course progress doesn't exist, create a new one
@@ -42,9 +54,12 @@ exports.updateCourseProgress = async (req, res) => {
 
     return res.status(200).json({ message: "Course progress updated" })
   } catch (error) {
-    console.error(error)
-    return res.status(500).json({ error: "Internal server error" })
-  }
+   console.error(error);
+   return res.status(500).json({
+    success: false,
+    error: error.message,
+  });
+}
 }
 
 exports.getProgressPercentage = async (req, res) => {
@@ -58,7 +73,7 @@ exports.getProgressPercentage = async (req, res) => {
   try {
     // Find the course progress document for the user and course
     let courseProgress = await CourseProgress.findOne({
-      courseID: courseId,
+      courseId: courseId,
       userId: userId,
     })
       .populate({
@@ -76,7 +91,7 @@ exports.getProgressPercentage = async (req, res) => {
     }
     console.log(courseProgress, userId)
     let lectures = 0
-    courseProgress.courseID.courseContent?.forEach((sec) => {
+    courseProgress.courseId.courseContent?.forEach((sec) => {
       lectures += sec.subSection.length || 0
     })
 
