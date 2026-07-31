@@ -1,6 +1,6 @@
 const { instance } = require("../config/razorpay") // create config first of razorpay in the config folder
 const Course = require("../models/Course")
-const User = require("../models/User")
+const User = require("../models/user")
 const CourseProgress = require("../models/CourseProgress")
 const mailSender = require("../utils/mailSender")
 const { courseEnrollmentEmail } = require("../mail/templates/courseEnrollmentEmail")

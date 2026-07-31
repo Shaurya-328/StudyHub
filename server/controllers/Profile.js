@@ -1,8 +1,8 @@
-const Profile = require("../models/Profile");
+const Profile = require("../models/profile");
 const CourseProgress = require("../models/CourseProgress")
 
 const Course = require("../models/Course")
-const User = require("../models/User");
+const User = require("../models/user");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 const mongoose = require("mongoose")
 const { convertSecondsToDuration } = require("../utils/secToDuration");

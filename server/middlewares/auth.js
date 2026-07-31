@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const User = require("../models/User");
+const User = require("../models/user");
 
 //authorisation
 // This middleware is the authentication middleware. Its job is to check whether the user has a valid JWT token before allowing access to a protected route.
