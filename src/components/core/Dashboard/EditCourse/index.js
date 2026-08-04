@@ -27,7 +27,7 @@ export default function EditCourse() {
       console.log("First element:", result[0])
       if (result) {
         dispatch(setEditCourse(true))
-        dispatch(setCourse(result))
+         dispatch(setCourse(result.courseDetails))
       }
       setLoading(false)
     })()
